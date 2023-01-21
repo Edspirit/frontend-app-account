@@ -1,10 +1,20 @@
 import { getConfig } from '@edx/frontend-platform';
 import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
 import { convertKeyNames, snakeCaseObject } from '@edx/frontend-platform/utils';
-import siteLanguageList from './constants';
 
 export async function getSiteLanguageList() {
-  return siteLanguageList;
+  const siteLanguageResponse = await fetch(
+    `${getConfig().LMS_BASE_URL}${getConfig().AC_LANGUAGES_API_URL}`,
+  );
+  const siteLanguageData = await siteLanguageResponse.json();
+  const siteLanguageList = JSON.parse(siteLanguageData);
+  const newSiteLanguageList = siteLanguageList?.map((siteLanguage) => {
+    if (siteLanguage.code === 'fa-IR') {
+      return { ...siteLanguage, code: 'fa' };
+    }
+    return siteLanguage;
+  });
+  return newSiteLanguageList;
 }
 
 export async function patchPreferences(username, params) {

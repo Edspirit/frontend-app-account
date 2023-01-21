@@ -10,6 +10,18 @@ $fa-font-path: "~font-awesome/fonts";
 
 @import "./account-settings/style";
 @import "./id-verification/id-verification";
+@import "./fonts";
+
+.lang_fa {
+  * {
+    font-family: IRANSans,FontAwesome !important ;
+  }
+}
+.lang_ar {
+  * {
+    font-family: "Noto Sans Arabic", FontAwesome !important ;
+  }
+}
 
 .word-break-all {
   word-break: break-all !important;
