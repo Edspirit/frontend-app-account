@@ -3,7 +3,7 @@ import caMessages from './messages/ca.json';
 // no need to import en messages-- they are in the defaultMessage field
 import es419Messages from './messages/es_419.json';
 import frMessages from './messages/fr.json';
-import faIRMessages from './messages/fa_IR.json';
+import faIRMessages from './messages/fa.json';
 import zhcnMessages from './messages/zh_CN.json';
 import heMessages from './messages/he.json';
 import idMessages from './messages/id.json';
