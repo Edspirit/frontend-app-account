@@ -184,6 +184,17 @@ class AccountSettingsPage extends React.Component {
     }
   };
 
+  handleFont = () => {
+    const body = document.querySelector('body');
+    if (this.context.locale === 'fa') {
+      body.className = 'lang_fa';
+    } else if (this.context.locale === 'ar') {
+      body.className = 'lang_ar';
+    } else {
+      body.removeAttribute('class');
+    }
+  };
+
   isEditable(fieldName) {
     return !this.props.staticFields.includes(fieldName);
   }
@@ -802,6 +813,7 @@ class AccountSettingsPage extends React.Component {
   }
 
   render() {
+    this.handleFont();
     const {
       loading,
       loaded,
