@@ -98,7 +98,6 @@ export function* handleSaveSettings(action) {
 
       publish(LOCALE_CHANGED, getLocale());
       handleRtl();
-      window.location.reload();
       savedValues = commitData;
     } else {
       savedValues = yield call(patchSettings, username, commitData, userId);
@@ -115,6 +114,7 @@ export function* handleSaveSettings(action) {
       yield put(saveSettingsFailure({ fieldErrors: e.fieldErrors }));
     } else {
       yield put(saveSettingsFailure(e.message));
+      window.location.reload();
       throw e;
     }
   }
