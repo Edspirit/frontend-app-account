@@ -37,5 +37,4 @@ export async function postSetLang(code) {
     .post(`${getConfig().LMS_BASE_URL}/i18n/setlang/`, formData, {
       headers: { 'X-Requested-With': 'XMLHttpRequest' },
     });
-  window.location.reload();
 }
