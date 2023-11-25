@@ -8,7 +8,10 @@ export async function getSiteLanguageList() {
   );
   const data = await response.json();
   const LanguageData = JSON.parse(data);
-  const siteLanguageList = LanguageData.map((language) => (language.code === 'fa-IR' ? { ...language, code: 'fa' } : language));
+  const siteLanguageList = LanguageData.map((language) => ({
+    ...language,
+    code: language.code.toLowerCase(),
+  }));
   return siteLanguageList;
 }
 
