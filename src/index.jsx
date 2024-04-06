@@ -13,6 +13,7 @@ import { Route, Routes, Outlet } from 'react-router-dom';
 import Header from '@edx/frontend-component-header';
 import { FooterSlot } from '@edx/frontend-component-footer';
 
+import { QueryClient, QueryClientProvider } from 'react-query';
 import configureStore from './data/configureStore';
 import AccountSettingsPage, { NotFoundPage } from './account-settings';
 import IdVerificationPage from './id-verification';
@@ -22,30 +23,39 @@ import './index.scss';
 import Head from './head/Head';
 import NotificationCourses from './notification-preferences/NotificationCourses';
 import NotificationPreferences from './notification-preferences/NotificationPreferences';
+import REACT_QUERY_CONSTANTS from './constants/react-query-constants';
 
 subscribe(APP_READY, () => {
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      ...REACT_QUERY_CONSTANTS,
+    },
+  });
+
   ReactDOM.render(
     <AppProvider store={configureStore()}>
-      <Head />
-      <Routes>
-        <Route element={(
-          <div className="d-flex flex-column" style={{ minHeight: '100vh' }}>
-            <Header />
-            <main className="flex-grow-1" id="main">
-              <Outlet />
-            </main>
-            <FooterSlot />
-          </div>
+      <QueryClientProvider client={queryClient}>
+        <Head />
+        <Routes>
+          <Route element={(
+            <div className="d-flex flex-column" style={{ minHeight: '100vh' }}>
+              <Header />
+              <main className="flex-grow-1" id="main">
+                <Outlet />
+              </main>
+              <FooterSlot />
+            </div>
         )}
-        >
-          <Route path="/notifications/:courseId" element={<NotificationPreferences />} />
-          <Route path="/notifications" element={<NotificationCourses />} />
-          <Route path="/id-verification/*" element={<IdVerificationPage />} />
-          <Route path="/" element={<AccountSettingsPage />} />
-          <Route path="/notfound" element={<NotFoundPage />} />
-          <Route path="*" element={<NotFoundPage />} />
-        </Route>
-      </Routes>
+          >
+            <Route path="/notifications/:courseId" element={<NotificationPreferences />} />
+            <Route path="/notifications" element={<NotificationCourses />} />
+            <Route path="/id-verification/*" element={<IdVerificationPage />} />
+            <Route path="/" element={<AccountSettingsPage />} />
+            <Route path="/notfound" element={<NotFoundPage />} />
+            <Route path="*" element={<NotFoundPage />} />
+          </Route>
+        </Routes>
+      </QueryClientProvider>
     </AppProvider>,
     document.getElementById('root'),
   );
