@@ -13,6 +13,7 @@ import { Route, Switch } from 'react-router-dom';
 import Header, { messages as headerMessages } from '@edx/frontend-component-header';
 import Footer, { messages as footerMessages } from '@edx/frontend-component-footer';
 
+import { QueryClient, QueryClientProvider } from 'react-query';
 import configureStore from './data/configureStore';
 import AccountSettingsPage, { NotFoundPage } from './account-settings';
 import IdVerificationPage from './id-verification';
@@ -21,26 +22,35 @@ import appMessages from './i18n';
 
 import './index.scss';
 import Head from './head/Head';
+import REACT_QUERY_CONSTANTS from './constants/react-query-constants';
 
 subscribe(APP_READY, () => {
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      ...REACT_QUERY_CONSTANTS,
+    },
+  });
+
   ReactDOM.render(
     <AppProvider store={configureStore()}>
-      <Head />
-      <Switch>
-        <Route path="/coaching_consent" component={CoachingConsent} />
-        <div className="d-flex flex-column" style={{ minHeight: '100vh' }}>
-          <Header />
-          <main className="flex-grow-1">
-            <Switch>
-              <Route path="/id-verification" component={IdVerificationPage} />
-              <Route exact path="/" component={AccountSettingsPage} />
-              <Route path="/notfound" component={NotFoundPage} />
-              <Route path="*" component={NotFoundPage} />
-            </Switch>
-          </main>
-          <Footer />
-        </div>
-      </Switch>
+      <QueryClientProvider client={queryClient}>
+        <Head />
+        <Switch>
+          <Route path="/coaching_consent" component={CoachingConsent} />
+          <div className="d-flex flex-column" style={{ minHeight: '100vh' }}>
+            <Header />
+            <main className="flex-grow-1">
+              <Switch>
+                <Route path="/id-verification" component={IdVerificationPage} />
+                <Route exact path="/" component={AccountSettingsPage} />
+                <Route path="/notfound" component={NotFoundPage} />
+                <Route path="*" component={NotFoundPage} />
+              </Switch>
+            </main>
+            <Footer />
+          </div>
+        </Switch>
+      </QueryClientProvider>
     </AppProvider>,
     document.getElementById('root'),
   );
