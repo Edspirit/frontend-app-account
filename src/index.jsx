@@ -35,11 +35,11 @@ subscribe(APP_READY, () => {
   ReactDOM.render(
     <AppProvider store={configureStore()}>
       <QueryClientProvider client={queryClient}>
-        <Head />
+        {/* <Head /> */}
         <Routes>
           <Route element={(
             <div className="d-flex flex-column" style={{ minHeight: '100vh' }}>
-              <Header />
+              <Header mfeTitle="account.page.title" />
               <main className="flex-grow-1" id="main">
                 <Outlet />
               </main>
