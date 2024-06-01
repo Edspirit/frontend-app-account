@@ -1,9 +1,11 @@
-import {
-  call, put, delay, takeEvery, all,
-} from 'redux-saga/effects';
+import { call, put, delay, takeEvery, all } from 'redux-saga/effects';
 
 import { publish } from '@edx/frontend-platform';
-import { getLocale, handleRtl, LOCALE_CHANGED } from '@edx/frontend-platform/i18n';
+import {
+  getLocale,
+  handleRtl,
+  LOCALE_CHANGED,
+} from '@edx/frontend-platform/i18n';
 import { getAuthenticatedUser } from '@edx/frontend-platform/auth';
 
 // Actions
@@ -53,25 +55,27 @@ export function* handleFetchSettings() {
     const { username, userId, roles: userRoles } = getAuthenticatedUser();
 
     const {
-      thirdPartyAuthProviders, profileDataManager, timeZones, ...values
-    } = yield call(
-      getSettings,
-      username,
-      userRoles,
-      userId,
-    );
-
-    const verifiedNameHistory = yield call(getVerifiedNameHistory);
-
-    if (values.country) { yield put(fetchTimeZones(values.country)); }
-
-    yield put(fetchSettingsSuccess({
-      values,
       thirdPartyAuthProviders,
       profileDataManager,
       timeZones,
-      verifiedNameHistory,
-    }));
+      ...values
+    } = yield call(getSettings, username, userRoles, userId);
+
+    const verifiedNameHistory = yield call(getVerifiedNameHistory);
+
+    if (values.country) {
+      yield put(fetchTimeZones(values.country));
+    }
+
+    yield put(
+      fetchSettingsSuccess({
+        values,
+        thirdPartyAuthProviders,
+        profileDataManager,
+        timeZones,
+        verifiedNameHistory,
+      })
+    );
   } catch (e) {
     yield put(fetchSettingsFailure(e.message));
     throw e;
@@ -104,7 +108,9 @@ export function* handleSaveSettings(action) {
       savedValues = yield call(patchSettings, username, commitData, userId);
     }
     yield put(saveSettingsSuccess(savedValues, commitData));
-    if (savedValues.country) { yield put(fetchTimeZones(savedValues.country)); }
+    if (savedValues.country) {
+      yield put(fetchTimeZones(savedValues.country));
+    }
     yield delay(1000);
     yield put(closeForm(action.payload.formId));
   } catch (e) {
@@ -115,6 +121,7 @@ export function* handleSaveSettings(action) {
       yield put(saveSettingsFailure({ fieldErrors: e.fieldErrors }));
     } else {
       yield put(saveSettingsFailure(e.message));
+      window.location.reload();
       throw e;
     }
   }
@@ -130,7 +137,12 @@ export function* handleSaveMultipleSettings(action) {
       const { formId, commitValues } = settingsArray[i];
       yield put(saveSettingsBegin());
       const commitData = { [formId]: commitValues };
-      const savedSettings = yield call(patchSettings, username, commitData, userId);
+      const savedSettings = yield call(
+        patchSettings,
+        username,
+        commitData,
+        userId
+      );
       yield put(saveSettingsSuccess(savedSettings, commitData));
     }
     yield put(saveMultipleSettingsSuccess(action));
