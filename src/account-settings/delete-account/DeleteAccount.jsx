@@ -51,7 +51,7 @@ export class DeleteAccount extends React.Component {
   };
 
   handleFinalClose = () => {
-    global.location = getConfig().LOGOUT_URL;
+    global.location = `${getConfig().LOGOUT_URL}?next=${getConfig().MARKETING_SITE_BASE_URL}`;
   };
 
   render() {
