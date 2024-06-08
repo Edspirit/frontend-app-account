@@ -13,6 +13,7 @@ import ptMessages from './messages/pt.json';
 import ruMessages from './messages/ru.json';
 import ukMessages from './messages/uk.json';
 import zhcnMessages from './messages/zh_CN.json';
+import zhhkMessages from './messages/zh_HK.json';
 import dedeCAMessages from './messages/de_DE.json';
 import ititCAMessages from './messages/it_IT.json';
 import ptptCAMessages from './messages/pt_PT.json';
@@ -24,6 +25,7 @@ const appMessages = {
   'fa-ir': faIRMessages,
   fr: frMessages,
   'zh-cn': zhcnMessages,
+  'zh-hk': zhhkMessages,
   pt: ptMessages,
   it: itMessages,
   de: deMessages,
@@ -36,9 +38,4 @@ const appMessages = {
   'pt-pt': ptptCAMessages,
 };
 
-export default [
-  headerMessages,
-  paragonMessages,
-  footerMessages,
-  appMessages,
-];
+export default [headerMessages, paragonMessages, footerMessages, appMessages];
