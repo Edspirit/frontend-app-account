@@ -32,6 +32,20 @@ export class DeleteAccount extends React.Component {
     };
   }
 
+  async componentDidMount() {
+    try {
+      const { LMS_BASE_URL, AC_INSTANCE_CONFIG_API_URL } = getConfig();
+      const response = await fetch(`${LMS_BASE_URL}${AC_INSTANCE_CONFIG_API_URL}`);
+      const result = await response.json();
+
+      this.setState({
+        platformName: result?.platform_name,
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   handleSubmit = () => {
     if (this.state.password === '') {
       this.props.deleteAccountFailure('empty-password');
@@ -58,6 +72,7 @@ export class DeleteAccount extends React.Component {
     const {
       hasLinkedTPA, isVerifiedAccount, status, errorType, intl,
     } = this.props;
+    const { platformName } = this.state;
     const canDelete = isVerifiedAccount && !hasLinkedTPA;
     const supportArticleUrl = process.env.SUPPORT_URL_TO_UNLINK_SOCIAL_MEDIA_ACCOUNT;
 
@@ -80,13 +95,13 @@ export class DeleteAccount extends React.Component {
         <p>
           {intl.formatMessage(
             messages['account.settings.delete.account.text.1'],
-            { siteName: getConfig().SITE_NAME },
+            { siteName: platformName },
           )}
         </p>
         <p>
           {intl.formatMessage(
             messages[deleteAccountText2MessageKey],
-            { siteName: getConfig().SITE_NAME },
+            { siteName: platformName },
           )}
         </p>
         <p>
@@ -95,7 +110,7 @@ export class DeleteAccount extends React.Component {
         <p className="text-danger h6">
           {intl.formatMessage(
             messages['account.settings.delete.account.text.warning'],
-            { siteName: getConfig().SITE_NAME },
+            { siteName: platformName },
           )}
         </p>
         <p>

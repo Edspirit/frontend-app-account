@@ -82,6 +82,7 @@ class AccountSettingsPage extends React.Component {
       visibility: null,
       user_id: this.context.authenticatedUser.userId,
     });
+    this.fetchPlatformName();
   }
 
   componentDidUpdate(prevProps) {
@@ -194,6 +195,20 @@ class AccountSettingsPage extends React.Component {
       this.props.saveSettings(formId, values);
     }
   };
+
+  async fetchPlatformName() {
+    try {
+      const { LMS_BASE_URL, AC_INSTANCE_CONFIG_API_URL } = getConfig();
+      const response = await fetch(`${LMS_BASE_URL}${AC_INSTANCE_CONFIG_API_URL}`);
+      const result = await response.json();
+
+      this.setState({
+        platformName: result?.platform_name,
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   isEditable(fieldName) {
     return !this.props.staticFields.includes(fieldName);
@@ -508,6 +523,9 @@ class AccountSettingsPage extends React.Component {
       && this.props.formValues.year_of_birth.toString() >= COPPA_COMPLIANCE_YEAR.toString()
       && !localStorage.getItem('submittedDOB')
     );
+
+    const { platformName } = this.state;
+
     return (
       <>
         { shouldUpdateDOB
@@ -547,7 +565,7 @@ class AccountSettingsPage extends React.Component {
             label={this.props.intl.formatMessage(messages['account.settings.field.username'])}
             helpText={this.props.intl.formatMessage(
               messages['account.settings.field.username.help.text'],
-              { siteName: getConfig().SITE_NAME },
+              { siteName: platformName },
             )}
             isEditable={false}
             {...editableFieldProps}
@@ -619,7 +637,7 @@ class AccountSettingsPage extends React.Component {
             confirmationMessageDefinition={messages['account.settings.field.email.confirmation']}
             helpText={this.props.intl.formatMessage(
               messages['account.settings.field.email.help.text'],
-              { siteName: getConfig().SITE_NAME },
+              { siteName: platformName },
             )}
             isEditable={this.isEditable('email')}
             {...editableFieldProps}
@@ -726,7 +744,7 @@ class AccountSettingsPage extends React.Component {
           <p>
             {this.props.intl.formatMessage(
               messages['account.settings.section.social.media.description'],
-              { siteName: getConfig().SITE_NAME },
+              { siteName: platformName },
             )}
           </p>
 
@@ -792,7 +810,7 @@ class AccountSettingsPage extends React.Component {
           <p>
             {this.props.intl.formatMessage(
               messages['account.settings.section.linked.accounts.description'],
-              { siteName: getConfig().SITE_NAME },
+              { siteName: platformName },
             )}
           </p>
           <ThirdPartyAuth />
