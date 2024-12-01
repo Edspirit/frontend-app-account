@@ -11,7 +11,7 @@ import ReactDOM from 'react-dom';
 import { Route, Routes, Outlet } from 'react-router-dom';
 
 import Header from '@edx/frontend-component-header';
-import { FooterSlot } from '@edx/frontend-component-footer';
+import FooterSlot from '@edx/frontend-component-footer';
 
 import { QueryClient, QueryClientProvider } from 'react-query';
 import configureStore from './data/configureStore';
@@ -39,7 +39,7 @@ subscribe(APP_READY, () => {
         <Routes>
           <Route element={(
             <div className="d-flex flex-column" style={{ minHeight: '100vh' }}>
-              <Header />
+              <Header mfeTitle="account.page.title" />
               <main className="flex-grow-1" id="main">
                 <Outlet />
               </main>
