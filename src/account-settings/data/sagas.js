@@ -98,6 +98,7 @@ export function* handleSaveSettings(action) {
 
       publish(LOCALE_CHANGED, getLocale());
       handleRtl();
+      window.location.reload();
       savedValues = commitData;
     } else {
       savedValues = yield call(patchSettings, username, commitData, userId);
